@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
+    ports:
+      - 3000:3000
+    environment:
+      - VITE_WS_PORT=80
+    volumes:
+      - ./client:/usr/app
+      - /usr/app/node_modules
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    ports:
+      - 80:80
+    volumes:
+      - type: bind
+        source: ./server/src
+        target: /go/app/src
+
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - type: volume
+        source: redis-volume
+        target: /data
+
+volumes:
+  redis-volume:

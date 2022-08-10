@@ -1,0 +1,2 @@
+FROM redis:6.2.7-alpine3.16
+EXPOSE 6379
