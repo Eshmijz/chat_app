@@ -4,7 +4,7 @@ import * as WebSocket from "websocket";
 const connect = (): Promise<WebSocket.w3cwebsocket> => {
   return new Promise((resolve, reject) => {
     const port = import.meta.env.VITE_WS_PORT;
-    const url = "ws://localhost:" + port + "/ws";
+    const url = "ws://localhost:" + port + "/ws" + location.pathname;
     const socket = new WebSocket.w3cwebsocket(url);
 
     socket.onopen = () => {

@@ -1,9 +1,9 @@
-import { MessageInput } from "./components/MessageInput";
-import { MessageList } from "./components/MessageList";
+import { MessageInput } from "..//components/MessageInput";
+import { MessageList } from "../components/MessageList";
 
-export const App = () => {
+export const Chat = () => {
   return (
-    <div className="min-h-screen flex flex-col max-w-2xl mx-auto">
+    <div className="min-h-screen flex flex-col max-w-xl mx-auto">
       <h1 className="text-2xl border-b-2 border-sky-800">Simple Chat</h1>
       <MessageInput />
       <MessageList />

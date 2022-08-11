@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -14,11 +15,6 @@ import (
 )
 
 func main() {
-	pubsub := services.NewPubSubService()
-	hub := domain.NewHub(pubsub)
-	go hub.SubscribeMessages()
-	go hub.RunLoop()
-
 	app := fiber.New()
 	app.Use(cors.New())
 
@@ -35,10 +31,22 @@ func main() {
 		return fiber.ErrUpgradeRequired
 	})
 
-	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
+	app.Get("/ws/:channel", websocket.New(func(c *websocket.Conn) {
+		channel := c.Params("channel")
+		pubsub := services.NewPubSubService()
+		hub := domain.NewHub(pubsub, channel)
+		go hub.SubscribeMessages()
+		go hub.RunLoop()
+
 		handlers.NewWebsocketHandler(hub).Handle(c)
 		for {}
 	}))
+
+	app.Get("/api/hello/:id", func(c *fiber.Ctx) error {
+		fmt.Println("hoge")
+		id := c.Params("id")
+		return c.SendString("Hello" + id)
+	})
 
 	port := "80"
 	log.Printf("Listening on port %s", port)

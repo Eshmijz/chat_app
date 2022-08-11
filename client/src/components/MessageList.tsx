@@ -1,6 +1,6 @@
 import { AnimatePresence, usePresence, motion } from "framer-motion";
 import { useMessageList } from "../hooks/use-message-list";
-import { Avator } from "./Avator";
+import { Avatar } from "./Avatar";
 
 
 export const MessageList = () => {
@@ -20,14 +20,10 @@ export const MessageList = () => {
     transition,
   };
 
-
   const messageList = useMessageList();
 
   return (
-    <div>
-      <div className="rounded-full bg-red-400 text-white w-10 h-10 p-2 text-center">
-        {messageList.length}
-      </div>
+    <div className="flex flex-col-reverse">
       <AnimatePresence>
         {messageList.map((m, i) => (
           <motion.div
@@ -35,11 +31,26 @@ export const MessageList = () => {
             {...animations}
             className='flex items-start border-b-2 p-2.5'
           >
-            <div className='flex p-4 items-center'>
-              <Avator />
-              <p className='px-8'>
-                {m.content}
-              </p>
+            <div className='mr-2'>
+              <Avatar userId={Number(m.user.userId)} />
+            </div>
+            {/* post body */}
+            <div className='flex-1 px-2.5'>
+              {/* post header */}
+              <div className='pb-1'>
+                <h3>
+                  {m.user.userName}{' '}
+                  <span className='text-sm text-gray-400 mb-2'>
+                    {'@'}
+                    {m.user.userId}
+                  </span>
+                  <span className='text-sm text-gray-500'>
+                    {'  '}
+                    {m.createdAt}
+                  </span>
+                </h3>
+              </div>
+              {m.content}
             </div>
           </motion.div>
         ))}

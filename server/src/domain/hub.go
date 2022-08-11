@@ -12,17 +12,17 @@ type Hub struct {
 	UnRegisterCh chan *Client
 	BroadcastCh  chan []byte
 	pubsub       *services.PubSubService
+	channel      string
 }
 
-const broadCastChan = "broadcast"
-
-func NewHub(pubsub *services.PubSubService) *Hub {
+func NewHub(pubsub *services.PubSubService, channel string) *Hub {
 	return &Hub{
 		Clients:      make(map[*Client]bool),
 		RegisterCh:   make(chan *Client),
 		UnRegisterCh: make(chan *Client),
 		BroadcastCh:  make(chan []byte),
 		pubsub:       pubsub,
+		channel:      channel,
 	}
 }
 
@@ -42,7 +42,7 @@ func (h *Hub) RunLoop() {
 }
 
 func (h *Hub) SubscribeMessages() {
-	ch := h.pubsub.Subscribe(context.TODO(), broadCastChan)
+	ch := h.pubsub.Subscribe(context.TODO(), h.channel)
 
 	for msg := range ch {
 		h.broadCastToAllClient([]byte(msg.Payload))
@@ -50,7 +50,7 @@ func (h *Hub) SubscribeMessages() {
 }
 
 func (h *Hub) publishMessage(msg []byte) {
-	h.pubsub.Publish(context.TODO(), broadCastChan, msg)
+	h.pubsub.Publish(context.TODO(), h.channel, msg)
 }
 
 func (h *Hub) register(c *Client) {
