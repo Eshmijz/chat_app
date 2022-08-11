@@ -31,12 +31,10 @@ export const MessageList = () => {
             {...animations}
             className='flex items-start border-b-2 p-2.5'
           >
-            <div className='mr-2'>
+            <div className=''>
               <Avatar userId={Number(m.user.userId)} />
             </div>
-            {/* post body */}
             <div className='flex-1 px-2.5'>
-              {/* post header */}
               <div className='pb-1'>
                 <h3>
                   {m.user.userName}{' '}

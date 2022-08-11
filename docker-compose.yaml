@@ -12,8 +12,8 @@ services:
     environment:
       - VITE_WS_PORT=80
     volumes:
-      - ./client:/usr/app
-      - /usr/app/node_modules
+      - ./client:/app
+      - /app/node_modules
     depends_on:
       - server
 

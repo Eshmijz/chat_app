@@ -1,9 +1,12 @@
-FROM node:16
+FROM node:16-alpine3.15
 
-WORKDIR /usr/app
+ENV NODE_ENV=development
+ENV ROOTPATH=/app
+WORKDIR ${ROOTPATH}
 
-COPY package*.json /usr/app/
-RUN npm i
+RUN apk add --no-cache --virtual .gyp python3 make g++
+COPY package*.json ${ROOTPATH}
+RUN npm install
 
 EXPOSE 3000
 CMD ["npm", "run", "dev" ]
